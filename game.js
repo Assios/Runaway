@@ -11,3 +11,4 @@ game.state.add('menu', menu);
 game.state.add('play', play);
 
 game.state.start('load');
+

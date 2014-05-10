@@ -71,3 +71,4 @@ var play = {
 		STONESPEED = 420 + num;
 	}
 }
+

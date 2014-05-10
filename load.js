@@ -14,3 +14,4 @@ var load = {
 		this.game.state.start('menu');
 	}
 }
+
