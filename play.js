@@ -33,8 +33,6 @@ var play = {
 	},
 
 	update: function() {
-		//WRITE DISTANCE
-
 		game.physics.arcade.collide(this.player, this.ground);
 
 		game.physics.arcade.collide(this.player, this.block);
@@ -71,4 +69,3 @@ var play = {
 		STONESPEED = 420 + num;
 	}
 }
-
