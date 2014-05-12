@@ -38,7 +38,7 @@ var load = {
             this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
             this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
             this.scale.setScreenSize(true);
-
+        }
 		this.game.state.start('menu');
 	}
 }
