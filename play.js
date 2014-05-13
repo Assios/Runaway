@@ -37,7 +37,7 @@ var play = {
 
 		game.physics.arcade.collide(this.player, this.block);
 
-	    if (spaceKey.isDown && this.player.body.touching.down)
+	    if ((spaceKey.isDown || game.input.activePointer.isDown) && this.player.body.touching.down)
 	    {
 	        this.player.body.velocity.y = -300;
 	    }
