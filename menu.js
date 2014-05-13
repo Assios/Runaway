@@ -6,8 +6,10 @@ var menu = {
 	},
 
 	update: function() {
-		if (spaceKey.isDown) {
+
+		if (game.input.activePointer.isDown)
+	    {
 			this.game.state.start('play');		
-		}
+	    }
 	}
 };

@@ -5,12 +5,12 @@ var play = {
 
 	    this.sky = game.add.sprite(0, 0, 'sky');
 
-	    this.ground = game.add.sprite(0, game.world.height - 32, 'ground');
+	    this.ground = game.add.sprite(0, h-300, 'ground');
 	    this.ground.scale.setTo(2, 2);
 	    game.physics.arcade.enable(this.ground);
 	    this.ground.body.immovable = true;
 
-	    this.player = game.add.sprite(game.world.width/2-30, game.world.height - 150, 'circle');
+	    this.player = game.add.sprite(w/2-30, h - 500, 'circle');
 	    this.player.scale.setTo(0.05, 0.05);
 	    game.physics.arcade.enable(this.player);
 
@@ -37,7 +37,7 @@ var play = {
 
 		game.physics.arcade.collide(this.player, this.block);
 
-	    if (spaceKey.isDown && this.player.body.touching.down)
+	    if ((spaceKey.isDown || game.input.activePointer.isDown) && this.player.body.touching.down)
 	    {
 	        this.player.body.velocity.y = -300;
 	    }
@@ -53,7 +53,7 @@ var play = {
 	    game.physics.arcade.enable(block);
 	    block.scale.setTo(0.3, 0.3);
 
-	    block.reset(w, h-68);
+	    block.reset(w, h-320);
 
 	    block.body.velocity.x = -SPEED;
 	},
