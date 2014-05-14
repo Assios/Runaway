@@ -1,20 +1,29 @@
 var play = {
+	preload: function() {
+
+		game.load.tilemap('map', 'assets/map.json', null, Phaser.Tilemap.TILED_JSON);
+
+		game.load.image('level', 'assets/level.png');
+
+	},
 
 	create: function() {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
+		game.physics.arcade.gravity.y = 800;
 
-	    this.sky = game.add.sprite(0, 0, 'sky');
+	    map = game.add.tilemap('map');
+	    map.addTilesetImage('level');
 
-	    this.ground = game.add.sprite(0, h-300, 'ground');
-	    this.ground.scale.setTo(2, 2);
-	    game.physics.arcade.enable(this.ground);
-	    this.ground.body.immovable = true;
+	    this.skyLayer = map.createLayer('sky');
+	    this.groundLayer = map.createLayer('ground');
+	    this.spikeLayer = map.createLayer('spike');
 
-	    this.player = game.add.sprite(w/2-30, h - 500, 'circle');
+	    this.player = game.add.sprite(w/2, h - 500, 'circle');
 	    this.player.scale.setTo(0.05, 0.05);
 	    game.physics.arcade.enable(this.player);
+	    game.physics.arcade.enable(this.groundLayer);
 
-	    this.player.body.gravity.y = 800;
+	    this.groundLayer.collideWorldBounds = true;
 	    this.player.body.collideWorldBounds = true;
 
 	    //Add evil blocks
@@ -33,27 +42,19 @@ var play = {
 	},
 
 	update: function() {
-		game.physics.arcade.collide(this.player, this.ground);
-
-		game.physics.arcade.collide(this.player, this.block);
+		game.physics.arcade.collide(this.player, this.spikeLayer);
 
 	    if ((spaceKey.isDown || game.input.activePointer.isDown) && this.player.body.touching.down)
 	    {
 	        this.player.body.velocity.y = -300;
 	    }
-
-		if (this.game.time.now > this.blockTime) {
-			this.blockTime = game.time.now + 2000;
-			this.addBlock();
-		}
 	},
 
 	addBlock: function() {
 		var block = this.blocks.getFirstDead();
 	    game.physics.arcade.enable(block);
-	    block.scale.setTo(0.3, 0.3);
 
-	    block.reset(w, h-320);
+	    block.reset(w, h-340);
 
 	    block.body.velocity.x = -SPEED;
 	},

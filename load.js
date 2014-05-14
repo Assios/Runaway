@@ -7,6 +7,10 @@ var load = {
 
 	    //load evil block
 	    game.load.image('block', 'assets/block.png');
+
+	    game.load.tilemap('map', 'assets/map.json', null, Phaser.Tilemap.TILED_JSON);
+
+		game.load.image('level', 'assets/level.png');
 	},
 
 	create: function() {
