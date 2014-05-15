@@ -1,36 +1,29 @@
 var play = {
-	preload: function() {
-
-		game.load.tilemap('map', 'assets/map.json', null, Phaser.Tilemap.TILED_JSON);
-
-		game.load.image('level', 'assets/level.png');
-
-	},
 
 	create: function() {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
-		game.physics.arcade.gravity.y = 800;
 
-	    map = game.add.tilemap('map');
-	    map.addTilesetImage('level');
-
-	    this.skyLayer = map.createLayer('sky');
-	    this.groundLayer = map.createLayer('ground');
-	    this.spikeLayer = map.createLayer('spike');
+		this.sky = game.add.sprite(0, 0, 'sky');
 
 	    this.player = game.add.sprite(w/2, h - 500, 'circle');
 	    this.player.scale.setTo(0.05, 0.05);
 	    game.physics.arcade.enable(this.player);
-	    game.physics.arcade.enable(this.groundLayer);
-
-	    this.groundLayer.collideWorldBounds = true;
+	    this.player.body.gravity.y = 1000;
 	    this.player.body.collideWorldBounds = true;
+	    this.player.body.bounce.y = 0.7;
+	    this.player.jumpCount = 0;
+
+	    this.ground = game.add.sprite(0, 300, 'ground');
+	    game.physics.arcade.enable(this.ground);
+	    this.ground.body.immovable = true;
+
+
 
 	    //Add evil blocks
-	    this.blocks = game.add.group();
-		this.blocks.createMultiple(10, 'block');
-		this.blocks.setAll('checkWorldBounds', true);	
-		this.blocks.setAll('outOfBoundsKill', true);
+	    this.spikes = game.add.group();
+		this.spikes.createMultiple(10, 'spike');
+		this.spikes.setAll('checkWorldBounds', true);	
+		this.spikes.setAll('outOfBoundsKill', true);
 
 		//START
 		this.blockTime = game.time.now + 1000;
@@ -42,21 +35,39 @@ var play = {
 	},
 
 	update: function() {
-		game.physics.arcade.collide(this.player, this.spikeLayer);
+		game.physics.arcade.collide(this.player, this.ground);
+        game.physics.arcade.collide(this.player, this.spikes, this.restart_game, null, this);
 
-	    if ((spaceKey.isDown || game.input.activePointer.isDown) && this.player.body.touching.down)
-	    {
-	        this.player.body.velocity.y = -300;
+	    game.input.onDown.add(this.jump, this);
+
+	    if (this.player.body.touching.down) {
+	    	this.player.jumpCount = 0;
+	    }
+
+	    if (game.time.now > this.blockTime) {
+	    	this.addBlock()
+	    	this.blockTime += Math.floor(Math.random() * 1200) + 300;
 	    }
 	},
 
+	jump: function() {
+		if (this.player.jumpCount < 2) {
+	        this.player.body.velocity.y = -300;
+	        this.player.jumpCount += 1;
+		}
+	},
+
+	restart_game: function() {  
+	    this.game.state.start('menu');
+	},
+
 	addBlock: function() {
-		var block = this.blocks.getFirstDead();
-	    game.physics.arcade.enable(block);
+		var spike = this.spikes.getFirstDead();
+	    game.physics.arcade.enable(spike);
 
-	    block.reset(w, h-340);
+	    spike.reset(w, h-330);
 
-	    block.body.velocity.x = -SPEED;
+	    spike.body.velocity.x = -SPEED;
 	},
 
 	newDistance: function() {

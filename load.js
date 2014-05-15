@@ -2,15 +2,9 @@ var load = {
 	preload: function() {
 		game.stage.backgroundColor = '#ddd';
 		game.load.image('sky', 'assets/sky.png');
-	    game.load.image('ground', 'assets/platform.png');
+	    game.load.image('ground', 'assets/ground.png');
 	    game.load.image('circle', 'assets/circle.png');
-
-	    //load evil block
-	    game.load.image('block', 'assets/block.png');
-
-	    game.load.tilemap('map', 'assets/map.json', null, Phaser.Tilemap.TILED_JSON);
-
-		game.load.image('level', 'assets/level.png');
+	    game.load.image('spike', 'assets/spike.png')
 	},
 
 	create: function() {

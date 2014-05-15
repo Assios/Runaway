@@ -12,4 +12,4 @@ var menu = {
 			this.game.state.start('play');		
 	    }
 	}
-};
+}

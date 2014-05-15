@@ -3,6 +3,7 @@ var h = 600;
 var SPEED = 400;
 var STONESPEED = 420;
 var distance = 1000;
+var score = 0;
 
 var game = new Phaser.Game(w, h, Phaser.AUTO, 'game', null, false, false);
 
