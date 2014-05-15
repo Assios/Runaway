@@ -29,9 +29,7 @@ var play = {
 		this.blockTime = game.time.now + 1000;
 
 		var style = { font: "35px Arial", fill: "#fff", align: "center" };
-		this.label_distance = this.game.add.text(20, 20, "yfr", style);
-
-		this.timer = this.game.time.events.loop(200, this.newDistance, this);
+		this.label_score = this.game.add.text(20, 20, "Score: 0", style);
 	},
 
 	update: function() {
@@ -68,12 +66,19 @@ var play = {
 	    spike.reset(w, h-330);
 
 	    spike.body.velocity.x = -SPEED;
+
+	    this.updateScore();
 	},
 
-	newDistance: function() {
+	/*newDistance: function() {
 		distance += (SPEED - STONESPEED) * 0.05;
 		this.label_distance.setText("Distance: " + Math.floor(distance) + " meters");
 		this.randomStoneSpeed();
+	},*/
+
+	updateScore: function() {
+		score += 1;
+		this.label_score.setText("Score: " + score);
 	},
 
 	randomStoneSpeed: function() {
