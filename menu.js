@@ -1,9 +1,8 @@
 var menu = {
 
 	create: function() {
-		this.game.add.text(20, 20, "Score: " + score, { font: "35px Arial", fill: "#000", align: "center" });
-		score = 0;
-		spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		this.game.add.text(20, 20, "Score: " + SCORE, { font: "35px Arial", fill: "#000", align: "center" });
+		SCORE = 0;
 		//Lag meny her
 	},
 

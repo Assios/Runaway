@@ -1,11 +1,9 @@
-var w = 1136;
-var h = 600;
+var W = 1136;
+var H = 600;
 var SPEED = 400;
-var STONESPEED = 420;
-var distance = 1000;
-var score = 0;
+var SCORE = 0;
 
-var game = new Phaser.Game(w, h, Phaser.AUTO, 'game', null, false, false);
+var game = new Phaser.Game(W, H, Phaser.AUTO, 'game', null, false, false);
 
 game.state.add('load', load);
 game.state.add('menu', menu);
