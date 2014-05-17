@@ -10,7 +10,6 @@ var play = {
 	    game.physics.arcade.enable(this.player);
 	    this.player.body.gravity.y = 850;
 	    this.player.body.bounce.y = 0.5;
-	    this.player.body.collideWorldBounds = true;
 	    this.player.body.xpos = this.player.body.position.x;
 	    this.player.jumpCount = 0;
 
@@ -18,14 +17,21 @@ var play = {
 	    game.physics.arcade.enable(this.ground);
 	    this.ground.body.immovable = true;
 
+	    this.small = game.add.group();
+		this.small.createMultiple(10, 'small');
+		this.small.setAll('checkWorldBounds', true);	
+		this.small.setAll('outOfBoundsKill', true);
+
 	    //Add evil spikes
 	    this.spikes = game.add.group();
 		this.spikes.createMultiple(10, 'spike');
 		this.spikes.setAll('checkWorldBounds', true);	
 		this.spikes.setAll('outOfBoundsKill', true);
 
-		//START
+		//TIMES
 		this.spikeTime = game.time.now + 1000;
+		this.nextState = game.time.now + 10000;
+		this.platformTime = game.time.now + 10400;
 
 		var style = { font: "35px Arial", fill: "#fff", align: "center" };
 		this.scoreLabel = this.game.add.text(20, 20, "Score: 0", style);
@@ -33,18 +39,33 @@ var play = {
 
 	update: function() {
 		game.physics.arcade.collide(this.player, this.ground);
+		game.physics.arcade.collide(this.player, this.small);
         game.physics.arcade.collide(this.player, this.spikes, this.restartGame, null, this);
 	    game.input.onDown.add(this.jump, this);
 
-	    this.returnPlayer();
+	    //Make sure that the player stays in the same spot
+	    this.player.body.position.x = this.player.body.xpos;
 
 	    if (this.player.body.touching.down) {
 	    	this.player.jumpCount = 0;
 	    }
 
-	    if (game.time.now > this.spikeTime) {
-	    	this.addSpike()
+	    if ((game.time.now > this.spikeTime) && (game.time.now < this.nextState-1000)) {
+	    	this.addSpike();
 	    	this.spikeTime += Math.floor(Math.random() * 1200) + 300;
+	    }
+
+	    if (game.time.now > this.nextState) {
+	    	this.ground.body.velocity.x = -SPEED;
+	    }
+
+	    if (game.time.now > this.platformTime) {
+	    	this.addPlatform();
+	    	this.platformTime += 1000;
+	    }
+
+	    if (this.player.body.position.y > 500) {
+	    	this.restartGame();
 	    }
 	},
 
@@ -71,6 +92,21 @@ var play = {
 
 	restartGame: function() {  
 	    this.game.state.start('menu');
+	},
+
+	addPlatform: function() {
+		var smallPlatform = this.small.getFirstDead();
+		game.physics.arcade.enable(smallPlatform);
+		smallPlatform.body.immovable = true;
+
+		var platformHeight = Array(300, 350, 400, 375, 390);
+		var platformHeight = platformHeight[Math.floor(Math.random()*platformHeight.length)];
+
+		smallPlatform.reset(W, H - platformHeight);
+
+		smallPlatform.body.velocity.x = -SPEED;
+
+		this.updateScore();
 	},
 
 	addSpike: function() {

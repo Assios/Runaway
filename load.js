@@ -5,6 +5,7 @@ var load = {
 	    game.load.image('ground', 'assets/ground.png');
 	    game.load.image('circle', 'assets/circle.png');
 	    game.load.image('spike', 'assets/spike.png')
+	    game.load.image('small', 'assets/small.png');
 	},
 
 	create: function() {
