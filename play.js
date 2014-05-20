@@ -17,10 +17,14 @@ var play = {
 	    game.physics.arcade.enable(this.ground);
 	    this.ground.body.immovable = true;
 
+	    //Small platforms to jump on
 	    this.small = game.add.group();
 		this.small.createMultiple(10, 'small');
 		this.small.setAll('checkWorldBounds', true);	
 		this.small.setAll('outOfBoundsKill', true);
+		this.platformLength = Array(600, 700, 800);
+		this.countPlatformHeight = 0;
+		this.countPlatforms = 0;
 
 	    //Add evil spikes
 	    this.spikes = game.add.group();
@@ -61,7 +65,8 @@ var play = {
 
 	    if (game.time.now > this.platformTime) {
 	    	this.addPlatform();
-	    	this.platformTime += 1000;
+	    	this.platformTime += Array(600, 700, 800, 1400, 800, 920)[this.countPlatforms];
+	    	this.countPlatforms++;
 	    }
 
 	    if (this.player.body.position.y > 500) {
@@ -96,16 +101,18 @@ var play = {
 
 	addPlatform: function() {
 		var smallPlatform = this.small.getFirstDead();
+
 		game.physics.arcade.enable(smallPlatform);
+
 		smallPlatform.body.immovable = true;
 
-		var platformHeight = Array(300, 350, 400, 375, 390);
-		var platformHeight = platformHeight[Math.floor(Math.random()*platformHeight.length)];
+		var platformHeight = Array(300, 350, 390, 375, 390, 430, 200);
+		var platformHeight = platformHeight[this.countPlatformHeight];
+		this.countPlatformHeight++;
 
 		smallPlatform.reset(W, H - platformHeight);
 
 		smallPlatform.body.velocity.x = -SPEED;
-
 		this.updateScore();
 	},
 
@@ -125,8 +132,4 @@ var play = {
 		this.scoreLabel.setText("Score: " + SCORE);
 	},
 
-	randomStoneSpeed: function() {
-		num = Math.floor(Math.random() * 101) - 50;
-		STONESPEED = 420 + num;
-	}
 }
