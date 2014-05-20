@@ -22,7 +22,8 @@ var play = {
 		this.small.createMultiple(10, 'small');
 		this.small.setAll('checkWorldBounds', true);	
 		this.small.setAll('outOfBoundsKill', true);
-		this.platformLength = Array(600, 700, 800);
+		this.platformLength = Array(1300, 800, 1400, 800, 920);
+		this.platformHeight = Array(350, 390, 375, 390, 430, 200);
 		this.countPlatformHeight = 0;
 		this.countPlatforms = 0;
 
@@ -37,8 +38,11 @@ var play = {
 		this.nextState = game.time.now + 10000;
 		this.platformTime = game.time.now + 10400;
 
+		//DISTANCE_TIMER
+		this.timer = this.game.time.events.loop(100, this.updateScore, this);  
+
 		var style = { font: "35px Arial", fill: "#fff", align: "center" };
-		this.scoreLabel = this.game.add.text(20, 20, "Score: 0", style);
+		this.scoreLabel = this.game.add.text(20, 20, "Distance: 0", style);
 	},
 
 	update: function() {
@@ -65,7 +69,7 @@ var play = {
 
 	    if (game.time.now > this.platformTime) {
 	    	this.addPlatform();
-	    	this.platformTime += Array(600, 700, 800, 1400, 800, 920)[this.countPlatforms];
+	    	this.platformTime += this.platformLength[this.countPlatforms];
 	    	this.countPlatforms++;
 	    }
 
@@ -106,14 +110,13 @@ var play = {
 
 		smallPlatform.body.immovable = true;
 
-		var platformHeight = Array(300, 350, 390, 375, 390, 430, 200);
-		var platformHeight = platformHeight[this.countPlatformHeight];
+		var newHeight = this.platformHeight[this.countPlatformHeight];
+
+		smallPlatform.reset(W, H - newHeight);
+
 		this.countPlatformHeight++;
 
-		smallPlatform.reset(W, H - platformHeight);
-
 		smallPlatform.body.velocity.x = -SPEED;
-		this.updateScore();
 	},
 
 	addSpike: function() {
@@ -123,13 +126,13 @@ var play = {
 	    spike.reset(W, H-330);
 
 	    spike.body.velocity.x = -SPEED;
-
-	    this.updateScore();
 	},
 
+
+
 	updateScore: function() {
-		SCORE += 1;
-		this.scoreLabel.setText("Score: " + SCORE);
+		DISTANCE += Math.ceil(SPEED * 0.0017);
+		this.scoreLabel.setText("DISTANCE: " + DISTANCE);
 	},
 
 }
